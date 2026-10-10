@@ -4,7 +4,7 @@ Applies to Felicity Solar FLB48314TG1 (16S LiFePO4, 48 V, 314 Ah) and, by the ve
 compatibility notes, to the other Felicity 48 V packs that offer the "Voltronic" RS485 setting
 (FLB48100, LPBF48 / LPBA48 family). Verified on three FLB48314TG1 packs in parallel, DIP
 addresses 1, 2 and 3, by capturing live bus traffic and cross‑checking every decoded value
-against an independent reading of the same packs. Last updated 2026‑10‑10.
+against an independent reading of the same packs. Last updated 2026‑10‑10 (version and alarm blocks confirmed with felicityd on the same day).
 
 The packs implement the Voltronic Power document **"Inverter and BMS 485 communication
 Protocol"** (Ellis / Lory / Jenny, 2020‑03‑25, file dated 2020‑12‑02), a copy of which is in
@@ -67,9 +67,20 @@ A robust parser should accept three header variants, in this order:
 Error response per the document: `ID | 0x83 | code | CRC` with code 1 = illegal ID, 2 = illegal
 function, 3 = CRC error. Not observed on Felicity.
 
-On a 9600 baud bus with a USB adapter, roughly 1 in 10 responses arrived truncated by one byte
-or missing the function byte. Validate the CRC, discard the frame, and simply ask again in the
-next cycle.
+On a 9600 baud bus with a USB adapter, roughly 1 in 10 responses arrived one byte short
+(10 of 111 in `captures/2026-10-10-rs485-bus.log`). Two patterns, both exactly one byte short:
+
+- 3 of 10: the **first byte (slave address) is missing**, so the frame starts with the function
+  code `03 00 11 …`. Prepending the address of the outstanding request makes the CRC verify, so
+  these frames can be repaired losslessly. This is the classic symptom of a USB‑RS485 adapter
+  whose TX→RX turnaround swallows the first byte, i.e. the loss is at the receiver, not the BMS.
+- 7 of 10: the **last byte (CRC high byte) is missing**; the data and the CRC low byte are intact.
+  Such a frame can only be checked against 8 bits of CRC (1 in 256 false accepts), so a cautious
+  implementation discards it and asks again in the next cycle. `felicityd` makes this repair
+  opt‑in (`FELICITYD_ACCEPT_TRUNCATED_CRC`).
+
+The simplest robust strategy remains: validate the CRC, discard what does not verify, and ask
+again next cycle.
 
 All registers are 16‑bit big‑endian. 32‑bit values occupy two consecutive registers, high word
 first.
@@ -81,10 +92,10 @@ Scaling for Felicity FLB48314TG1 ("HD" variant: mV everywhere). The Voltronic do
 
 | Reg (dec) | Hex | Name | Type | Scale | Unit | Status | Observed / notes |
 |---|---|---|---|---|---|---|---|
-| 1 | 0x01 | Protocol type | u16 | 1 | – | document | default 0 |
-| 2 | 0x02 | Protocol version | u16 | 1 | – | document | default 0 |
-| 3–4 | 0x03 | BMS firmware version | u32 | – | – | document | |
-| 5–6 | 0x05 | BMS hardware version | u32 | – | – | document | |
+| 1 | 0x01 | Protocol type | u16 | 1 | – | verified | reads 0 |
+| 2 | 0x02 | Protocol version | u16 | 1 | – | verified | reads 0 |
+| 3–4 | 0x03 | BMS firmware version | u32 | – | – | verified | 0x0001_0001 → "1.1" (high word.low word) on all three packs |
+| 5–6 | 0x05 | BMS hardware version | u32 | – | – | verified | 0x0001_0001 → "1.1" |
 | 16 | 0x10 | Number of cells | u16 | 1 | – | verified | 16 |
 | 17–36 | 0x11–0x24 | Cell voltage 1..20 | u16 | 0.001 | V | verified | 3338–3344; cells beyond "Number of cells" read 0 |
 | 37 | 0x25 | Number of temperature sensors | u16 | 1 | – | verified | 4 |
@@ -94,13 +105,13 @@ Scaling for Felicity FLB48314TG1 ("HD" variant: mV everywhere). The Voltronic do
 | 50 | 0x32 | Pack voltage | u16 | 0.001 | V | verified | 53400–53470 |
 | 51 | 0x33 | State of charge | u16 | 1 | % | verified | 95, 96 |
 | 52–53 | 0x34 | Full‑charge capacity | u32 | 0.001 | Ah | verified | 0x0005_5730 = 350000 mAh = 350.0 Ah |
-| 54 | 0x36 | Packs online | u16 | 1 | – | document | |
-| 55 | 0x37 | Charge alarm | bits | – | – | document | bit0 CHT, bit1 COV, bit2 CLT, bit3 OCC |
-| 56 | 0x38 | Discharge alarm | bits | – | – | document | bit0 DHT, bit1 DLT, bit2 FETHT, bit3 CUV |
-| 57 | 0x39 | Charge protect | bits | – | – | document | see §7 |
-| 58 | 0x3A | Charge protect 2 | bits | – | – | document | see §7 |
-| 59 | 0x3B | Discharge protect | bits | – | – | document | see §7 |
-| 60 | 0x3C | Discharge protect 2 | bits | – | – | document | see §7 |
+| 54 | 0x36 | Packs online | u16 | 1 | – | answered | block 54..60 is answered by Felicity firmware 1.1; all registers read 0 on a healthy system, so the bit meanings are still unconfirmed |
+| 55 | 0x37 | Charge alarm | bits | – | – | answered (0) | bit0 CHT, bit1 COV, bit2 CLT, bit3 OCC |
+| 56 | 0x38 | Discharge alarm | bits | – | – | answered (0) | bit0 DHT, bit1 DLT, bit2 FETHT, bit3 CUV |
+| 57 | 0x39 | Charge protect | bits | – | – | answered (0) | see §7 |
+| 58 | 0x3A | Charge protect 2 | bits | – | – | answered (0) | see §7 |
+| 59 | 0x3B | Discharge protect | bits | – | – | answered (0) | see §7 |
+| 60 | 0x3C | Discharge protect 2 | bits | – | – | answered (0) | see §7 |
 | 61 | 0x3D | BMS state | u16 | – | – | document | reserved, 0 |
 | 62–63 | 0x3E | Design capacity | u32 | 0.001 | Ah | document | |
 | 64–74 | 0x40–0x4A | Cell count + cell‑pair voltage state | u16 | – | – | document | 00 normal, 01 below limit, 02 above limit |
@@ -181,8 +192,10 @@ With three packs and one request per ~1.3 s, a full status refresh for every pac
 
 ## 9. Open questions
 
-- Whether Felicity firmware implements the alarm / protection / state registers (0x36–0x3C,
-  0x40–0x69) and remaining capacity (0x75–0x77), or returns 0x0000 for them.
+- Felicity firmware 1.1 answers the version block (0x01–0x06) and the alarm / protection block
+  (0x36–0x3C); the latter read 0x0000 on a healthy system, so the bit assignments of §7 remain
+  unconfirmed until an alarm is actually observed. State registers (0x40–0x69) and remaining
+  capacity (0x75–0x77) are still untested.
 - Maximum register count per request.
 - Whether address 0 (document: "common ID, every BMS answers") is honoured by Felicity. With DIP
   addresses 1–3 each address returns its own pack's data.
