@@ -1,0 +1,568 @@
+{
+  "avty": [
+    {
+      "t": "felicity/availability"
+    },
+    {
+      "t": "felicity/pack/1/availability"
+    }
+  ],
+  "avty_mode": "all",
+  "cmps": {
+    "felicity_pack_1_bus_errors": {
+      "ent_cat": "diagnostic",
+      "ic": "mdi:alert-circle-outline",
+      "name": "Bus errors",
+      "p": "sensor",
+      "stat_cla": "total_increasing",
+      "sug_dsp_prc": 0,
+      "uniq_id": "felicity_pack_1_bus_errors",
+      "val_tpl": "{{ value_json.bus_errors }}"
+    },
+    "felicity_pack_1_capacity_ah": {
+      "ent_cat": "diagnostic",
+      "ic": "mdi:battery-high",
+      "name": "Full charge capacity",
+      "p": "sensor",
+      "stat_cla": "measurement",
+      "sug_dsp_prc": 1,
+      "uniq_id": "felicity_pack_1_capacity_ah",
+      "unit_of_meas": "Ah",
+      "val_tpl": "{{ value_json.capacity_ah }}"
+    },
+    "felicity_pack_1_cell_1": {
+      "dev_cla": "voltage",
+      "en": false,
+      "ent_cat": "diagnostic",
+      "name": "Cell 1 voltage",
+      "p": "sensor",
+      "stat_cla": "measurement",
+      "sug_dsp_prc": 3,
+      "uniq_id": "felicity_pack_1_cell_1",
+      "unit_of_meas": "V",
+      "val_tpl": "{{ value_json.cells[0] }}"
+    },
+    "felicity_pack_1_cell_10": {
+      "dev_cla": "voltage",
+      "en": false,
+      "ent_cat": "diagnostic",
+      "name": "Cell 10 voltage",
+      "p": "sensor",
+      "stat_cla": "measurement",
+      "sug_dsp_prc": 3,
+      "uniq_id": "felicity_pack_1_cell_10",
+      "unit_of_meas": "V",
+      "val_tpl": "{{ value_json.cells[9] }}"
+    },
+    "felicity_pack_1_cell_11": {
+      "dev_cla": "voltage",
+      "en": false,
+      "ent_cat": "diagnostic",
+      "name": "Cell 11 voltage",
+      "p": "sensor",
+      "stat_cla": "measurement",
+      "sug_dsp_prc": 3,
+      "uniq_id": "felicity_pack_1_cell_11",
+      "unit_of_meas": "V",
+      "val_tpl": "{{ value_json.cells[10] }}"
+    },
+    "felicity_pack_1_cell_12": {
+      "dev_cla": "voltage",
+      "en": false,
+      "ent_cat": "diagnostic",
+      "name": "Cell 12 voltage",
+      "p": "sensor",
+      "stat_cla": "measurement",
+      "sug_dsp_prc": 3,
+      "uniq_id": "felicity_pack_1_cell_12",
+      "unit_of_meas": "V",
+      "val_tpl": "{{ value_json.cells[11] }}"
+    },
+    "felicity_pack_1_cell_13": {
+      "dev_cla": "voltage",
+      "en": false,
+      "ent_cat": "diagnostic",
+      "name": "Cell 13 voltage",
+      "p": "sensor",
+      "stat_cla": "measurement",
+      "sug_dsp_prc": 3,
+      "uniq_id": "felicity_pack_1_cell_13",
+      "unit_of_meas": "V",
+      "val_tpl": "{{ value_json.cells[12] }}"
+    },
+    "felicity_pack_1_cell_14": {
+      "dev_cla": "voltage",
+      "en": false,
+      "ent_cat": "diagnostic",
+      "name": "Cell 14 voltage",
+      "p": "sensor",
+      "stat_cla": "measurement",
+      "sug_dsp_prc": 3,
+      "uniq_id": "felicity_pack_1_cell_14",
+      "unit_of_meas": "V",
+      "val_tpl": "{{ value_json.cells[13] }}"
+    },
+    "felicity_pack_1_cell_15": {
+      "dev_cla": "voltage",
+      "en": false,
+      "ent_cat": "diagnostic",
+      "name": "Cell 15 voltage",
+      "p": "sensor",
+      "stat_cla": "measurement",
+      "sug_dsp_prc": 3,
+      "uniq_id": "felicity_pack_1_cell_15",
+      "unit_of_meas": "V",
+      "val_tpl": "{{ value_json.cells[14] }}"
+    },
+    "felicity_pack_1_cell_16": {
+      "dev_cla": "voltage",
+      "en": false,
+      "ent_cat": "diagnostic",
+      "name": "Cell 16 voltage",
+      "p": "sensor",
+      "stat_cla": "measurement",
+      "sug_dsp_prc": 3,
+      "uniq_id": "felicity_pack_1_cell_16",
+      "unit_of_meas": "V",
+      "val_tpl": "{{ value_json.cells[15] }}"
+    },
+    "felicity_pack_1_cell_2": {
+      "dev_cla": "voltage",
+      "en": false,
+      "ent_cat": "diagnostic",
+      "name": "Cell 2 voltage",
+      "p": "sensor",
+      "stat_cla": "measurement",
+      "sug_dsp_prc": 3,
+      "uniq_id": "felicity_pack_1_cell_2",
+      "unit_of_meas": "V",
+      "val_tpl": "{{ value_json.cells[1] }}"
+    },
+    "felicity_pack_1_cell_3": {
+      "dev_cla": "voltage",
+      "en": false,
+      "ent_cat": "diagnostic",
+      "name": "Cell 3 voltage",
+      "p": "sensor",
+      "stat_cla": "measurement",
+      "sug_dsp_prc": 3,
+      "uniq_id": "felicity_pack_1_cell_3",
+      "unit_of_meas": "V",
+      "val_tpl": "{{ value_json.cells[2] }}"
+    },
+    "felicity_pack_1_cell_4": {
+      "dev_cla": "voltage",
+      "en": false,
+      "ent_cat": "diagnostic",
+      "name": "Cell 4 voltage",
+      "p": "sensor",
+      "stat_cla": "measurement",
+      "sug_dsp_prc": 3,
+      "uniq_id": "felicity_pack_1_cell_4",
+      "unit_of_meas": "V",
+      "val_tpl": "{{ value_json.cells[3] }}"
+    },
+    "felicity_pack_1_cell_5": {
+      "dev_cla": "voltage",
+      "en": false,
+      "ent_cat": "diagnostic",
+      "name": "Cell 5 voltage",
+      "p": "sensor",
+      "stat_cla": "measurement",
+      "sug_dsp_prc": 3,
+      "uniq_id": "felicity_pack_1_cell_5",
+      "unit_of_meas": "V",
+      "val_tpl": "{{ value_json.cells[4] }}"
+    },
+    "felicity_pack_1_cell_6": {
+      "dev_cla": "voltage",
+      "en": false,
+      "ent_cat": "diagnostic",
+      "name": "Cell 6 voltage",
+      "p": "sensor",
+      "stat_cla": "measurement",
+      "sug_dsp_prc": 3,
+      "uniq_id": "felicity_pack_1_cell_6",
+      "unit_of_meas": "V",
+      "val_tpl": "{{ value_json.cells[5] }}"
+    },
+    "felicity_pack_1_cell_7": {
+      "dev_cla": "voltage",
+      "en": false,
+      "ent_cat": "diagnostic",
+      "name": "Cell 7 voltage",
+      "p": "sensor",
+      "stat_cla": "measurement",
+      "sug_dsp_prc": 3,
+      "uniq_id": "felicity_pack_1_cell_7",
+      "unit_of_meas": "V",
+      "val_tpl": "{{ value_json.cells[6] }}"
+    },
+    "felicity_pack_1_cell_8": {
+      "dev_cla": "voltage",
+      "en": false,
+      "ent_cat": "diagnostic",
+      "name": "Cell 8 voltage",
+      "p": "sensor",
+      "stat_cla": "measurement",
+      "sug_dsp_prc": 3,
+      "uniq_id": "felicity_pack_1_cell_8",
+      "unit_of_meas": "V",
+      "val_tpl": "{{ value_json.cells[7] }}"
+    },
+    "felicity_pack_1_cell_9": {
+      "dev_cla": "voltage",
+      "en": false,
+      "ent_cat": "diagnostic",
+      "name": "Cell 9 voltage",
+      "p": "sensor",
+      "stat_cla": "measurement",
+      "sug_dsp_prc": 3,
+      "uniq_id": "felicity_pack_1_cell_9",
+      "unit_of_meas": "V",
+      "val_tpl": "{{ value_json.cells[8] }}"
+    },
+    "felicity_pack_1_cell_avg": {
+      "dev_cla": "voltage",
+      "ent_cat": "diagnostic",
+      "name": "Cell voltage average",
+      "p": "sensor",
+      "stat_cla": "measurement",
+      "sug_dsp_prc": 3,
+      "uniq_id": "felicity_pack_1_cell_avg",
+      "unit_of_meas": "V",
+      "val_tpl": "{{ value_json.cell_avg }}"
+    },
+    "felicity_pack_1_cell_delta_mv": {
+      "dev_cla": "voltage",
+      "json_attr_t": "felicity/pack/1/state",
+      "json_attr_tpl": "{{ {'cell_min_index': value_json.cell_min_index, 'cell_max_index': value_json.cell_max_index} | tojson }}",
+      "name": "Cell voltage delta",
+      "p": "sensor",
+      "stat_cla": "measurement",
+      "sug_dsp_prc": 0,
+      "uniq_id": "felicity_pack_1_cell_delta_mv",
+      "unit_of_meas": "mV",
+      "val_tpl": "{{ value_json.cell_delta_mv }}"
+    },
+    "felicity_pack_1_cell_max": {
+      "dev_cla": "voltage",
+      "ent_cat": "diagnostic",
+      "json_attr_t": "felicity/pack/1/state",
+      "json_attr_tpl": "{{ {'cell': value_json.cell_max_index} | tojson }}",
+      "name": "Cell voltage max",
+      "p": "sensor",
+      "stat_cla": "measurement",
+      "sug_dsp_prc": 3,
+      "uniq_id": "felicity_pack_1_cell_max",
+      "unit_of_meas": "V",
+      "val_tpl": "{{ value_json.cell_max }}"
+    },
+    "felicity_pack_1_cell_min": {
+      "dev_cla": "voltage",
+      "ent_cat": "diagnostic",
+      "json_attr_t": "felicity/pack/1/state",
+      "json_attr_tpl": "{{ {'cell': value_json.cell_min_index} | tojson }}",
+      "name": "Cell voltage min",
+      "p": "sensor",
+      "stat_cla": "measurement",
+      "sug_dsp_prc": 3,
+      "uniq_id": "felicity_pack_1_cell_min",
+      "unit_of_meas": "V",
+      "val_tpl": "{{ value_json.cell_min }}"
+    },
+    "felicity_pack_1_charge_alarm": {
+      "dev_cla": "problem",
+      "ent_cat": "diagnostic",
+      "json_attr_t": "felicity/pack/1/state",
+      "json_attr_tpl": "{{ {'flags': value_json.alarms.flags | select('match', 'charge_alarm:') | list} | tojson }}",
+      "name": "Charge alarm",
+      "p": "binary_sensor",
+      "uniq_id": "felicity_pack_1_charge_alarm",
+      "val_tpl": "{{ 'ON' if value_json.alarms.charge_alarm else 'OFF' }}"
+    },
+    "felicity_pack_1_charge_current": {
+      "dev_cla": "current",
+      "en": false,
+      "ent_cat": "diagnostic",
+      "name": "Charge current",
+      "p": "sensor",
+      "stat_cla": "measurement",
+      "sug_dsp_prc": 1,
+      "uniq_id": "felicity_pack_1_charge_current",
+      "unit_of_meas": "A",
+      "val_tpl": "{{ value_json.charge_current }}"
+    },
+    "felicity_pack_1_charge_current_limit": {
+      "dev_cla": "current",
+      "ent_cat": "diagnostic",
+      "name": "Charge current limit",
+      "p": "sensor",
+      "stat_cla": "measurement",
+      "sug_dsp_prc": 1,
+      "uniq_id": "felicity_pack_1_charge_current_limit",
+      "unit_of_meas": "A",
+      "val_tpl": "{{ value_json.charge_current_limit }}"
+    },
+    "felicity_pack_1_charge_enabled": {
+      "ent_cat": "diagnostic",
+      "ic": "mdi:battery-arrow-up",
+      "name": "Charge enabled",
+      "p": "binary_sensor",
+      "uniq_id": "felicity_pack_1_charge_enabled",
+      "val_tpl": "{{ 'ON' if value_json.charge_enabled else 'OFF' }}"
+    },
+    "felicity_pack_1_charge_immediately": {
+      "ent_cat": "diagnostic",
+      "ic": "mdi:battery-alert",
+      "name": "Charge immediately request",
+      "p": "binary_sensor",
+      "uniq_id": "felicity_pack_1_charge_immediately",
+      "val_tpl": "{{ 'ON' if value_json.charge_immediately else 'OFF' }}"
+    },
+    "felicity_pack_1_charge_protection": {
+      "dev_cla": "problem",
+      "ent_cat": "diagnostic",
+      "json_attr_t": "felicity/pack/1/state",
+      "json_attr_tpl": "{{ {'flags': value_json.alarms.flags | select('match', 'charge_protect') | list} | tojson }}",
+      "name": "Charge protection",
+      "p": "binary_sensor",
+      "uniq_id": "felicity_pack_1_charge_protection",
+      "val_tpl": "{{ 'ON' if value_json.alarms.charge_protection else 'OFF' }}"
+    },
+    "felicity_pack_1_charge_voltage_limit": {
+      "dev_cla": "voltage",
+      "ent_cat": "diagnostic",
+      "name": "Charge voltage limit",
+      "p": "sensor",
+      "stat_cla": "measurement",
+      "sug_dsp_prc": 1,
+      "uniq_id": "felicity_pack_1_charge_voltage_limit",
+      "unit_of_meas": "V",
+      "val_tpl": "{{ value_json.charge_voltage_limit }}"
+    },
+    "felicity_pack_1_charging": {
+      "dev_cla": "battery_charging",
+      "name": "Charging",
+      "p": "binary_sensor",
+      "uniq_id": "felicity_pack_1_charging",
+      "val_tpl": "{{ 'ON' if value_json.charging else 'OFF' }}"
+    },
+    "felicity_pack_1_current": {
+      "dev_cla": "current",
+      "name": "Current",
+      "p": "sensor",
+      "stat_cla": "measurement",
+      "sug_dsp_prc": 1,
+      "uniq_id": "felicity_pack_1_current",
+      "unit_of_meas": "A",
+      "val_tpl": "{{ value_json.current }}"
+    },
+    "felicity_pack_1_discharge_alarm": {
+      "dev_cla": "problem",
+      "ent_cat": "diagnostic",
+      "json_attr_t": "felicity/pack/1/state",
+      "json_attr_tpl": "{{ {'flags': value_json.alarms.flags | select('match', 'discharge_alarm:') | list} | tojson }}",
+      "name": "Discharge alarm",
+      "p": "binary_sensor",
+      "uniq_id": "felicity_pack_1_discharge_alarm",
+      "val_tpl": "{{ 'ON' if value_json.alarms.discharge_alarm else 'OFF' }}"
+    },
+    "felicity_pack_1_discharge_current": {
+      "dev_cla": "current",
+      "en": false,
+      "ent_cat": "diagnostic",
+      "name": "Discharge current",
+      "p": "sensor",
+      "stat_cla": "measurement",
+      "sug_dsp_prc": 1,
+      "uniq_id": "felicity_pack_1_discharge_current",
+      "unit_of_meas": "A",
+      "val_tpl": "{{ value_json.discharge_current }}"
+    },
+    "felicity_pack_1_discharge_current_limit": {
+      "dev_cla": "current",
+      "ent_cat": "diagnostic",
+      "name": "Discharge current limit",
+      "p": "sensor",
+      "stat_cla": "measurement",
+      "sug_dsp_prc": 1,
+      "uniq_id": "felicity_pack_1_discharge_current_limit",
+      "unit_of_meas": "A",
+      "val_tpl": "{{ value_json.discharge_current_limit }}"
+    },
+    "felicity_pack_1_discharge_enabled": {
+      "ent_cat": "diagnostic",
+      "ic": "mdi:battery-arrow-down",
+      "name": "Discharge enabled",
+      "p": "binary_sensor",
+      "uniq_id": "felicity_pack_1_discharge_enabled",
+      "val_tpl": "{{ 'ON' if value_json.discharge_enabled else 'OFF' }}"
+    },
+    "felicity_pack_1_discharge_protection": {
+      "dev_cla": "problem",
+      "ent_cat": "diagnostic",
+      "json_attr_t": "felicity/pack/1/state",
+      "json_attr_tpl": "{{ {'flags': value_json.alarms.flags | select('match', 'discharge_protect') | list} | tojson }}",
+      "name": "Discharge protection",
+      "p": "binary_sensor",
+      "uniq_id": "felicity_pack_1_discharge_protection",
+      "val_tpl": "{{ 'ON' if value_json.alarms.discharge_protection else 'OFF' }}"
+    },
+    "felicity_pack_1_discharge_voltage_limit": {
+      "dev_cla": "voltage",
+      "ent_cat": "diagnostic",
+      "name": "Discharge voltage limit",
+      "p": "sensor",
+      "stat_cla": "measurement",
+      "sug_dsp_prc": 1,
+      "uniq_id": "felicity_pack_1_discharge_voltage_limit",
+      "unit_of_meas": "V",
+      "val_tpl": "{{ value_json.discharge_voltage_limit }}"
+    },
+    "felicity_pack_1_full_charge_request": {
+      "ent_cat": "diagnostic",
+      "ic": "mdi:battery-charging-100",
+      "name": "Full charge request",
+      "p": "binary_sensor",
+      "uniq_id": "felicity_pack_1_full_charge_request",
+      "val_tpl": "{{ 'ON' if value_json.full_charge_request else 'OFF' }}"
+    },
+    "felicity_pack_1_power": {
+      "dev_cla": "power",
+      "name": "Power",
+      "p": "sensor",
+      "stat_cla": "measurement",
+      "sug_dsp_prc": 0,
+      "uniq_id": "felicity_pack_1_power",
+      "unit_of_meas": "W",
+      "val_tpl": "{{ value_json.power }}"
+    },
+    "felicity_pack_1_remaining_ah": {
+      "ic": "mdi:battery-medium",
+      "name": "Remaining capacity",
+      "p": "sensor",
+      "stat_cla": "measurement",
+      "sug_dsp_prc": 1,
+      "uniq_id": "felicity_pack_1_remaining_ah",
+      "unit_of_meas": "Ah",
+      "val_tpl": "{{ value_json.remaining_ah }}"
+    },
+    "felicity_pack_1_small_current_charge_request": {
+      "ent_cat": "diagnostic",
+      "ic": "mdi:battery-charging-low",
+      "name": "Small current charge request",
+      "p": "binary_sensor",
+      "uniq_id": "felicity_pack_1_small_current_charge_request",
+      "val_tpl": "{{ 'ON' if value_json.small_current_charge_request else 'OFF' }}"
+    },
+    "felicity_pack_1_soc": {
+      "dev_cla": "battery",
+      "json_attr_t": "felicity/pack/1/state",
+      "json_attr_tpl": "{{ {'address': value_json.address, 'cell_count': value_json.cell_count, 'temp_sensor_count': value_json.temp_sensor_count, 'cell_scale': value_json.cell_scale, 'voltage_scale': value_json.voltage_scale, 'last_update': value_json.last_update} | tojson }}",
+      "name": "State of charge",
+      "p": "sensor",
+      "stat_cla": "measurement",
+      "sug_dsp_prc": 0,
+      "uniq_id": "felicity_pack_1_soc",
+      "unit_of_meas": "%",
+      "val_tpl": "{{ value_json.soc }}"
+    },
+    "felicity_pack_1_status_raw": {
+      "en": false,
+      "ent_cat": "diagnostic",
+      "ic": "mdi:hexadecimal",
+      "json_attr_t": "felicity/pack/1/state",
+      "json_attr_tpl": "{{ {'flags': value_json.status_flags} | tojson }}",
+      "name": "BMS status register",
+      "p": "sensor",
+      "uniq_id": "felicity_pack_1_status_raw",
+      "val_tpl": "{{ '0x%02x' % value_json.status_raw }}"
+    },
+    "felicity_pack_1_temp_1": {
+      "dev_cla": "temperature",
+      "en": false,
+      "ent_cat": "diagnostic",
+      "name": "Temperature sensor 1",
+      "p": "sensor",
+      "stat_cla": "measurement",
+      "sug_dsp_prc": 1,
+      "uniq_id": "felicity_pack_1_temp_1",
+      "unit_of_meas": "°C",
+      "val_tpl": "{{ value_json.temps[0] }}"
+    },
+    "felicity_pack_1_temp_2": {
+      "dev_cla": "temperature",
+      "en": false,
+      "ent_cat": "diagnostic",
+      "name": "Temperature sensor 2",
+      "p": "sensor",
+      "stat_cla": "measurement",
+      "sug_dsp_prc": 1,
+      "uniq_id": "felicity_pack_1_temp_2",
+      "unit_of_meas": "°C",
+      "val_tpl": "{{ value_json.temps[1] }}"
+    },
+    "felicity_pack_1_temp_3": {
+      "dev_cla": "temperature",
+      "en": false,
+      "ent_cat": "diagnostic",
+      "name": "Temperature sensor 3",
+      "p": "sensor",
+      "stat_cla": "measurement",
+      "sug_dsp_prc": 1,
+      "uniq_id": "felicity_pack_1_temp_3",
+      "unit_of_meas": "°C",
+      "val_tpl": "{{ value_json.temps[2] }}"
+    },
+    "felicity_pack_1_temp_4": {
+      "dev_cla": "temperature",
+      "en": false,
+      "ent_cat": "diagnostic",
+      "name": "Temperature sensor 4",
+      "p": "sensor",
+      "stat_cla": "measurement",
+      "sug_dsp_prc": 1,
+      "uniq_id": "felicity_pack_1_temp_4",
+      "unit_of_meas": "°C",
+      "val_tpl": "{{ value_json.temps[3] }}"
+    },
+    "felicity_pack_1_temperature": {
+      "dev_cla": "temperature",
+      "name": "Temperature",
+      "p": "sensor",
+      "stat_cla": "measurement",
+      "sug_dsp_prc": 1,
+      "uniq_id": "felicity_pack_1_temperature",
+      "unit_of_meas": "°C",
+      "val_tpl": "{{ value_json.temperature }}"
+    },
+    "felicity_pack_1_voltage": {
+      "dev_cla": "voltage",
+      "name": "Voltage",
+      "p": "sensor",
+      "stat_cla": "measurement",
+      "sug_dsp_prc": 2,
+      "uniq_id": "felicity_pack_1_voltage",
+      "unit_of_meas": "V",
+      "val_tpl": "{{ value_json.voltage }}"
+    }
+  },
+  "dev": {
+    "ids": [
+      "felicity_pack_1"
+    ],
+    "mdl": "FLB48314TG1",
+    "mf": "Felicity Solar",
+    "name": "Felicity Battery 1",
+    "sw": "1.2",
+    "via_device": "felicity_system"
+  },
+  "o": {
+    "name": "felicityd",
+    "sw": "test",
+    "url": "https://example.invalid"
+  },
+  "qos": 0,
+  "stat_t": "felicity/pack/1/state"
+}

@@ -1,0 +1,42 @@
+[Unit]
+Description=felicityd - Felicity Solar battery RS485 to MQTT bridge (Home Assistant discovery)
+Documentation=https://github.com/KrzysztofHajdamowicz/felicity-battery-modbus
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/felicityd
+EnvironmentFile=/etc/default/felicityd
+Restart=on-failure
+RestartSec=10
+TimeoutStopSec=15
+
+# Run as an unprivileged dynamic user that may open the USB-RS485 adapter.
+DynamicUser=yes
+SupplementaryGroups=dialout
+DevicePolicy=closed
+DeviceAllow=char-ttyUSB rw
+DeviceAllow=char-ttyACM rw
+DeviceAllow=char-ttyAMA rw
+
+# Hardening. The daemon only needs the serial device and an outgoing TCP connection.
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+PrivateDevices=no
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+RestrictNamespaces=yes
+LockPersonality=yes
+MemoryDenyWriteExecute=yes
+RestrictRealtime=yes
+SystemCallArchitectures=native
+SystemCallFilter=@system-service
+SystemCallFilter=~@privileged @resources
+
+[Install]
+WantedBy=multi-user.target

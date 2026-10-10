@@ -1,0 +1,41 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Build and publish release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+          cache: true
+      - run: go test -race ./...
+      - name: Build all targets
+        run: |
+          set -euo pipefail
+          version="${GITHUB_REF_NAME}"
+          mkdir -p dist
+          for target in linux/amd64 linux/arm64 linux/arm/7; do
+            IFS=/ read -r goos goarch goarm <<< "$target"
+            suffix="${goos}_${goarch}${goarm:+v$goarm}"
+            CGO_ENABLED=0 GOOS=$goos GOARCH=$goarch GOARM=$goarm \
+              go build -trimpath -ldflags "-s -w -X main.version=${version}" -o "dist/felicityd" ./cmd/felicityd
+            tar -C dist -czf "dist/felicityd_${version}_${suffix}.tar.gz" felicityd \
+              -C "${GITHUB_WORKSPACE}/deploy" felicityd.service felicityd.env.example
+            rm dist/felicityd
+          done
+          (cd dist && sha256sum *.tar.gz > SHA256SUMS)
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            dist/*.tar.gz
+            dist/SHA256SUMS
+          generate_release_notes: true

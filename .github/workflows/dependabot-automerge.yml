@@ -1,0 +1,41 @@
+# Dependabot policy:
+#   * every update is assigned to KrzysztofHajdamowicz (see .github/dependabot.yml),
+#   * patch updates (x.y.Z) are auto-merged once CI is green,
+#   * minor and major updates wait for a human.
+#
+# Auto-merge needs "Allow auto-merge" in the repository settings and a branch protection rule on
+# main that requires the "Test and lint" check (and no required reviews).
+name: Dependabot auto-merge
+
+on: pull_request
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  automerge:
+    if: github.event.pull_request.user.login == 'dependabot[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fetch Dependabot metadata
+        id: meta
+        uses: dependabot/fetch-metadata@v2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Enable auto-merge for patch updates
+        if: steps.meta.outputs.update-type == 'version-update:semver-patch'
+        run: gh pr merge --auto --squash "$PR_URL"
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Leave minor/major updates for review
+        if: steps.meta.outputs.update-type != 'version-update:semver-patch'
+        run: |
+          gh pr comment "$PR_URL" --body "Dependabot ${UPDATE_TYPE#version-update:semver-} update - needs manual review and merge."
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          UPDATE_TYPE: ${{ steps.meta.outputs.update-type }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
