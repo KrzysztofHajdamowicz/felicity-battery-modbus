@@ -1,0 +1,922 @@
+Voltronic Power
+  Inverter and BMS 485 communication Protocol
+Ellis/ Lory/ Jenny       
+2020/03/25                        
+BMS Pin Definition
+1.1 BMS Port
+Figure 1 Battery Product Interface
+Figure 2 Breaker
+Figure 3 External connector
+Figure 4 RJ45 Communication port
+Figure 5 RJ11 Communication port
+Figure 6 ID Switch
+*Note1: 
+1. When numbers of BMS are used for parallel control，each BMS ID switch must different. Each BMS is individual, there is no need to distinguish which BMS is master. 
+2. If only one BMS is inserted in system, you can adjust the arrows of ID switch to 0~9，If two BMS are inserted in system, you can adjust the arrows of ID switch of one BMS to 0~9 and adjust the arrows of ID switch of the other BMS to the rest.
+1.2 Start to use battery and power on
+Step 1, wake up from shutdown mode (shipment mode)
+The battery is shipped in shutdown mode, all the LEDs is off. There are two ways to wake up the battery pack from shipment mode. 1ST, to charge the battery pack by UPS. 2nd, press the button for more than 5 seconds. The LEDs will turn on after wake up.
+Step 2, connect the power connector to UPS DC
+Step 3, turn on the Breaker 
+Step 4, connect battery RJ45 485 communication cable to UPS 485 interface to active battery.
+Step 5, if there is no 485 communication with UPS, need to insert one “Pres” cable into RJ11 instead, to active the battery.
+1.3 Connection of Battery Pack in parallel
+Battery could be connected with parallel, the max parallel number is 10pcs. Battery packs communicate with CANBUS, and then one of the battery pack communication with system with RS485. And each BMS ID switch must different.
+Connecting Diagram as below.
+Communication parameter configuration
+Baud rate
+ | Start bit
+ | Data bit
+ | Parity bit
+ | Stop bit
+ | 9600
+ | 1
+ | 8
+ | N
+ | 1
+Communication frame format
+Device query command format
+Index
+ | 1
+ | 2
+ | 3
+ | 4
+ | 5
+ | Function
+ | Slave ID
+ | Command type
+ | Start Address of data
+ | Data Length
+ | *CRC
+ | Bytes
+ | 1
+ | 1
+ | 2
+ | 2
+ | 2
+ | BMS address
+ | Function code
+ | MSB
+ | LSB
+ | MSB
+ | LSB
+ | LSB
+ | MSB
+ | *The CRC check range is all of the bytes before the CRC field,
+Command type table
+Index
+ | Command type
+ | Description
+ | 1
+ | 0x03
+ | Read Data
+ | 2
+ | 0x10
+ | Write Data
+BMS normal response format
+Index
+ | 1
+ | 2
+ | 3
+ | 4
+ | 5
+ | Function
+ | Slave ID
+ | Command type
+ | Data Length
+ | Data information
+ | CRC
+ | Bytes
+ | 1
+ | 1
+ | 2
+ | Data length * 2
+ | 2
+ | BMS address
+ | Function code
+ | MSB
+ | LSB
+ | MSB
+ | LSB
+ | LSB
+ | MSB
+BMS abnormal response format
+Index
+ | 1
+ | 2
+ | 3
+ | 4
+ | Function
+ | Slave ID
+ | Command type + 128
+ | Error code
+ | CRC
+ | Bytes
+ | 1
+ | 1
+ | 1
+ | 2
+Error code
+Index
+ | Error code
+ | Note
+ | 1
+ | 0x01
+ | Slave ID should be within 1~16. Slave ID error if out of range
+ | 2
+ | 0x02
+ | Command type error if command didn’t exist, 
+ | 3
+ | 0x03
+ | CRC error
+Command lists
+  The common node ID of BMS for RS485 communication is  is 0x01, every BMS can respond ID 0x01.
+Beside, each BMS has unique ID for RS485 communication. For example, if arrow of ID switch is point to 0, then this BMS unique ID is 0x0F. ID switch show in Figure 6. Using common ID( 0x01) or unique ID(like 0x0F) to visit BMS, the data of return from BMS are the same.
+4.1 Version information
+Data Address
+ | Byte Size
+ | Parameter
+ | Parameter Unit
+ | Remarks
+ | 0x0001
+ | 2
+ | Protocol type
+ | Default 0
+ | 0x0002
+ | 2
+ | Protocol version
+ | Default 0
+ | 0x0003
+ | 4
+ | BMS firmware version
+ | ACE define
+ | 0x0005
+ | 4
+ | BMS hardware version
+4.2 BMS general status parameters inquiry
+Data Address
+ | Byte Size
+ | Parameter
+ | Parameter Unit
+ | Remarks
+ | 0x0010
+ | 2
+ | Number of cell: M
+ | pcs
+ | Current single pack data
+serial cell number, default 15
+ | 0x0011
+ | 2
+ | Cell1 voltage
+ | 0.1V
+ | Current single pack data
+cell voltage 1 ~ 15
+ | 0x0012
+ | 2
+ | Cell2 voltage
+ | 0x0013
+ | 2
+ | Cell3 voltage
+ | 0x0014
+ | 2
+ | Cell4 voltage
+ | 0x0015
+ | 2
+ | Cell5 voltage
+ | 0x0016
+ | 2
+ | Cell6 voltage
+ | 0x0017
+ | 2
+ | Cell7 voltage
+ | 0x0018
+ | 2
+ | Cell8 voltage
+ | 0x0019
+ | 2
+ | Cell9 voltage
+ | 0x001A
+ | 2
+ | Cell10 voltage
+ | 0x001B
+ | 2
+ | Cell11 voltage
+ | 0x001C
+ | 2
+ | Cell12 voltage
+ | 0x001D
+ | 2
+ | Cell13 voltage
+ | 0x001E
+ | 2
+ | Cell14 voltage
+ | 0x001F
+ | 2
+ | Cell15 voltage
+ | 0x0020
+ | 2
+ | Cell16 voltage
+ | Default 0
+ | 0x0021
+ | 2
+ | Cell17 voltage
+ | Default 0
+ | 0x0022
+ | 2
+ | Cell18 voltage
+ | Default 0
+ | 0x0023
+ | 2
+ | Cell19 voltage
+ | Default 0
+ | 0x0024
+ | 2
+ | *Cell20 voltage
+ | Default 0
+ | 0x0025
+ | 2
+ | Number of temperature sensor: N
+ | pcs
+ | Current single pack data NTC number 6
+ | 0x0026
+ | 2
+ | Temperature Sensor 1
+ | 0.1K
+(Kelvin temperature)
+ | Current single pack data NTC1 temperature
+ | 0x0027
+ | 2
+ | Temperature Sensor 2
+ | Current single pack data NTC2 temperature
+ | 0x0028
+ | 2
+ | Temperature Sensor 3
+ | Current single pack data NTC3 temperature
+ | 0x0029
+ | 2
+ | Temperature Sensor 4
+ | Current single pack data NTC4 temperature
+ | 0x002A
+ | 2
+ | Temperature Sensor 5
+ | Current single pack data NTC5 temperature
+ | 0x002B
+ | 2
+ | Temperature Sensor 6
+ | Current single pack data MOSFET temperature
+ | 0x002C
+ | 2
+ | Temperature Sensor 7
+ | Default 0
+ | 0x002D
+ | 2
+ | Temperature Sensor 8
+ | Default 0
+ | 0x002E
+ | 2
+ | Temperature Sensor 9
+ | Default 0
+ | 0x002F
+ | 2
+ | Temperature Sensor 10
+ | Default 0
+ | 0x0030
+ | 2
+ | Module charge current
+ | 0.1A
+ | Summary data of all packs
+Sum of charge current, is 0 when discharging
+ | 0x0031
+ | 2
+ | Module discharge current
+ | 0.1A
+ | Summary data of all packs Sum of discharge current of all packs, is 0 when charging
+ | 0x0032
+ | 2
+ | Module voltage
+ | 0.1V
+ | Summary data of all packs Average voltage of all packs
+ | 0x0033
+ | 2
+ | SOC
+ | %
+ | Summary data of all packs Average SOC of all packs
+ | 0x0034
+ | 4
+ | Module total capacity
+ | mAH
+ | Summary data of all packs Sum of fully charged capacity of all packs
+ | *If the parameter doesn’t exist, return 0x0000
+4.3 BMS manufacturer usage inquiry
+Data Address
+ | Byte Size
+ | Parameter
+ | Parameter Unit
+ | 0x0036
+ | 2
+ | Pack parallel number
+ | /
+ | Summary data of all packs Number of online packs
+ | 0x0037
+ | 2
+ | Charge Alarm
+ | /
+ | Summary data of all packs Charge alarm bits of all online packs (The result of logic “OR” of charge alarm bits of all single pack)
+ | 0x0038
+ | 2
+ | Discharge Alarm
+ | /
+ | Summary data of all packs Discharge alarm bits of all online packs (The result of logic “OR” of discharge alarm bits of all single pack)
+ | 0x0039
+ | 2
+ | Charge Protect
+ | /
+ | Summary data of all packs Charge protect bits of all online packs (The result of logic “OR” of charge protect bits of all single pack)
+ | 0x003A
+ | 2
+ | Charge Protect 2
+ | /
+ | 0x003B
+ | 2
+ | Discharge Protect
+ | /
+ | Summary data of all packs Discharge protect bits of all online packs (The result of logic “OR” of discharge protect bits of all single pack)
+ | 0x003C
+ | 2
+ | Discharge Protect 2
+ | /
+ | 0x003D
+ | 2
+ | BMS State
+ | /
+ | Reserved, default 0
+ | 0x003E
+ | 4
+ | Design capacity
+ | mAh
+ | Current single pack data Design capacity of single pack (not consider parallel 50Ah and 100Ah packs)
+Charge Alarm
+Bit
+ | Content
+ | Note
+ | Remarks
+ | 15
+ | Reserved
+ | 　
+ | 　
+ | 14
+ | Reserved
+ | 　
+ | 　
+ | 13
+ | Reserved
+ | 　
+ | 　
+ | 12
+ | Reserved
+ | 　
+ | 　
+ | 11
+ | Reserved
+ | 　
+ | 　
+ | 10
+ | Reserved
+ | 　
+ | 　
+ | 9
+ | Reserved
+ | 　
+ | 　
+ | 8
+ | Reserved
+ | 　
+ | 　
+ | 7
+ | Reserved
+ | 　
+ | 　
+ | 6
+ | Reserved
+ | 　
+ | 　
+ | 5
+ | Reserved
+ | 　
+ | 　
+ | 4
+ | Reserved
+ | 　
+ | 　
+ | 3
+ | OCC
+ | Charge over current alarm
+ | 　
+ | 2
+ | CLT
+ | Charge low temperature alarm
+ | 　
+ | 1
+ | COV
+ | Cell over voltage alarm
+ | 　
+ | 0
+ | CHT
+ | Charge over temperature alarm
+ | 　
+Discharge alarm
+Bit
+ | Content
+ | Note
+ | Remarks
+ | 15
+ | Reserved
+ | 　
+ | 　
+ | 14
+ | Reserved
+ | 　
+ | 　
+ | 13
+ | Reserved
+ | 　
+ | 　
+ | 12
+ | Reserved
+ | 　
+ | 　
+ | 11
+ | Reserved
+ | 　
+ | 　
+ | 10
+ | Reserved
+ | 　
+ | 　
+ | 9
+ | Reserved
+ | 　
+ | 　
+ | 8
+ | Reserved
+ | 　
+ | 　
+ | 7
+ | Reserved
+ | 　
+ | 　
+ | 6
+ | Reserved
+ | 　
+ | 　
+ | 5
+ | Reserved
+ | 　
+ | 　
+ | 4
+ | Reserved
+ | 　
+ | 　
+ | 3
+ | CUV
+ | Cell voltage low alarm
+ | 　
+ | 2
+ | FETHT
+ | Mosfet over temperature alarm
+ | 　
+ | 1
+ | DLT
+ | Discharge low temperature alarm
+ | 　
+ | 0
+ | DHT
+ | Discharge over temperature alarm
+ | 　
+Charge Protect
+Bit
+ | Content
+ | Note
+ | Remarks
+ | 15
+ | OCC2
+ | 2nd level charge over current
+ | 　
+ | 14
+ | Reserved
+ | 　
+ | 　
+ | 13
+ | CANID
+ | CAN ID distribution not complete
+ | 　
+ | 12
+ | 2NDOVP
+ | 2nd level cell over voltage
+ | 　
+ | 11
+ | OCC
+ | Charge over current
+ | 　
+ | 10
+ | OCV
+ | Cell over voltage
+ | 　
+ | 9
+ | CLT
+ | Charge low temperature
+ | 　
+ | 8
+ | CHT
+ | Charge over temperature
+ | 　
+ | 7
+ | SUV
+ | Safety under voltage
+ | 　
+ | 6
+ | FETHT
+ | Mosfet over temperature
+ | 　
+ | 5
+ | AFESCD
+ | AFE detect discharge short circuit
+ | 　
+ | 4
+ | AFEOCD
+ | AFE detect discharge over current
+ | 　
+ | 3
+ | AFEOCC
+ | AFE detect charge over current
+ | 　
+ | 2
+ | AFEComm
+ | AFE communication fail
+ | 　
+ | 1
+ | BoostNRDY
+ | Mosfet driver status
+ | 　
+ | 0
+ | PRES
+ | &quot;In System&quot; signal
+ | 　
+Charge Protect 2
+Bit
+ | Content
+ | Note
+ | Remarks
+ | 15
+ | Reserved
+ | 14
+ | Reserved
+ | 13
+ | Reserved
+ | 12
+ | Reserved
+ | 11
+ | Reserved
+ | 10
+ | Reserved
+ | 9
+ | Reserved
+ | 8
+ | Reserved
+ | 7
+ | Reserved
+ | 6
+ | Reserved
+ | 5
+ | Reserved
+ | 4
+ | Reserved
+ | 3
+ | IDError
+ | CAN ID error
+ | 2
+ | OCCHw
+ | Detect charge short circuit
+ | 1
+ | Shutdown
+ | Low voltage shutdown
+ | 0
+ | ShutdownByCmd
+ | Receive shutdown command
+Discharge protect
+Bit
+ | Content
+ | Note
+ | Remarks
+ | 15
+ | Shutdown
+ | Low voltage shutdown
+ | 　
+ | 14
+ | DHT
+ | Discharge over termperature
+ | 　
+ | 13
+ | DLT
+ | Discharge low temperature
+ | 　
+ | 12
+ | OCD
+ | Discharge over current
+ | 　
+ | 11
+ | CUV
+ | Cell under voltage
+ | 　
+ | 10
+ | FETHT
+ | Mosfet over temperature
+ | 　
+ | 9
+ | Reserved
+ | 　
+ | 　
+ | 8
+ | Reserved
+ | 　
+ | 　
+ | 7
+ | Reserved
+ | 　
+ | 　
+ | 6
+ | IDError
+ | CAN ID error
+ | 　
+ | 5
+ | Reserved
+ | 　
+ | 　
+ | 4
+ | AFESCD
+ | AFE detect discharge short circuit
+ | 　
+ | 3
+ | AFEOCD
+ | AFE detect discharge over current
+ | 　
+ | 2
+ | AFEOCC
+ | AFE detect charge over current
+ | 　
+ | 1
+ | BoostNRDY
+ | Mosfet driver status
+ | 　
+ | 0
+ | PRES
+ | &quot;In System&quot; signal
+ | 　
+Discharge protect 2
+Bit
+ | Content
+ | Note
+ | Remarks
+ | 15
+ | Reserved
+ | 　
+ | 　
+ | 14
+ | Reserved
+ | 　
+ | 　
+ | 13
+ | CANID
+ | CAN ID distribution not complete
+ | 　
+ | 12
+ | Reserved
+ | 　
+ | 　
+ | 11
+ | Reserved
+ | 　
+ | 　
+ | 10
+ | Reserved
+ | 　
+ | 　
+ | 9
+ | Reserved
+ | 　
+ | 　
+ | 8
+ | Reserved
+ | 　
+ | 　
+ | 7
+ | Reserved
+ | 　
+ | 　
+ | 6
+ | ShutdownByCmd
+ | Receive shutdown command
+ | 　
+ | 5
+ | DHT2
+ | 2nd level discharge over temperature
+ | 　
+ | 4
+ | 2NDOVP
+ | 2nd level cell over voltage
+ | 　
+ | 3
+ | Reserved
+ | 　
+ | 　
+ | 2
+ | OCD2
+ | 2nd level discharge over current
+ | 　
+ | 1
+ | Short
+ | Detect discharge short circuit
+ | 　
+ | 0
+ | AFEComm
+ | AFE communication fail
+ | 　
+4.4 BMS warning information inquiry
+Data Address
+ | Byte Size
+ | Parameter
+ | Note
+ | Remarks
+ | 0x0040
+ | 2
+ | Number of cell: M
+ | Current single pack data 
+Single pack serial cell number, default 15
+ | 0x0041
+ | 2
+ | Cell 1/2 voltage state
+ | 00H: normal01H: below lower limit 02H: above higher limit 
+F0H: other error
+ | Current single pack data Status of current single pack, F0H is not implemented.
+00H: normal01H: under voltage protect 02H: over voltage protect
+ | 0x0042
+ | 2
+ | Cell 3/4 voltage state
+ | 0x0043
+ | 2
+ | Cell 5/6 voltage state
+ | 0x0044
+ | 2
+ | Cell 7/8 voltage state
+ | 0x0045
+ | 2
+ | Cell 9/10 voltage state
+ | 0x0046
+ | 2
+ | Cell 11/12 voltage state
+ | 0x0047
+ | 2
+ | Cell 13/14 voltage state
+ | 0x0048
+ | 2
+ | Cell 15/16 voltage state
+ | 0x0049
+ | 2
+ | Cell 17/18 voltage state
+ | 0x004A
+ | 2
+ | Cell 19/20 voltage state
+ | 0x0050
+ | 2
+ | Number of temperature sensor: N
+ | Single pack NTC number 6
+ | 0x0051
+ | 2
+ | BMS Temperature1/2 state
+ | 00H: normal01H: below lower limit02H: above higher limit
+F0H: other error
+ | Current single pack data Status of current single pack, F0H is not implemented.
+00H: normal01H: under temp protect02H: over temp protect
+ | 0x0052
+ | 2
+ | BMS Temperature3/4 state
+ | 0x0053
+ | 2
+ | BMS Temperature5/6 state
+ | 0x0054
+ | 2
+ | BMS Temperature7/8 state
+ | 0x0055
+ | 2
+ | BMS Temperature9/10 state
+ | 0x0060
+ | 2
+ | Module charge voltage state
+ | 00H: normal01H: below lower limit 02H: above higher limit 
+F0H: other error
+ | Current single pack data The corresponding status of current single pack
+ | 0x0061
+ | 2
+ | Module discharge voltage state
+ | 0x0062
+ | 2
+ | Cell charge voltage state
+ | 0x0063
+ | 2
+ | Cell discharge voltage state
+ | 0x0064
+ | 2
+ | Module charge current state
+ | 0x0065
+ | 2
+ | Module discharge current state
+ | 0x0066
+ | 2
+ | Module charge temperature state
+ | 0x0067
+ | 2
+ | Module discharge temperature state
+ | 0x0068
+ | 2
+ | Cell charge temperature state
+ | 0x0069
+ | 2
+ | Cell discharge temperature state
+ | *If the parameter didn’t exist, return 0x0000
+4.5 BMS charger and discharge information inquiry
+Data Address
+ | Byte Size
+ | Parameter
+ | Parameter Unit
+ | Remarks
+ | 0x0070
+ | 2
+ | Charge voltage limit
+ | 0.1V
+ | Current single pack data Charge alarm voltage 3750mv*15 = 56250mv
+ | 0x0071
+ | 2
+ | Discharge voltage limit
+ | 0.1V
+ | Current single pack data Discharge alarm voltage
+ 2600mv *15 = 39000mv
+(not used by UPS yet)
+ | 0x0072
+ | 2
+ | Charge current limit
+ | 0.1A
+ | Summary data of all packs Total charge current protect threshold of all online packs
+(not used by UPS yet)
+ | 0x0073
+ | 2
+ | Discharge current limit
+ | 0.1A
+ | Summary data of all packs Total discharge current protect threshold of all online packs
+(not used by UPS yet)
+ | 0x0074
+ | 2
+ | Charge, discharge status
+ | 0x0075
+ | 2
+ | Run Time To Empty
+ | min
+ | Summary data of all packs Total available capacity of all packs / discharge current
+ | 0x0076
+ | 4
+ | Module remain capacity
+ | mAh
+ | Summary data of all packs Total available capacity of all packs
+Charge, discharge status:
+Bit
+ | Content
+ | Note
+ | Remarks
+ | 7
+ | Charge enable
+ | 1: yes 0: request stop charge
+ | Summary data of all packs Any pack disables charge, set 0
+ | 6
+ | Discharge enable
+ | 1: yes 0: request stop discharge
+ | Summary data of all packs All packs disable discharge, set 0
+ | 5
+ | Charge immediately
+ | 1: request: 0: no request
+ | SOC &lt;=9% set 1, otherwise 0
+ | 4
+ | Charge immediately2
+ | 1: request: 0: no request
+ | 9 &lt;SOC &lt;=14% set 1, otherwise 0
+ | 3
+ | Full charge request
+ | 1: request: 0: no request
+ | Always 0
+ | 2
+ | Small current charge request
+ | 1: request: 0: no request
+ | Always 0
+ | 1
+ | 0
+*Bit 5: Set when SoC is very low, like 5~9%, device need charge immediately until this flag disappear.
+*Bit 4: Set when SoC is low, like 10~14%, it will be better that device charge immediately until this flag disappear.
+*Bit 3: Set when BMS need device fully charged.

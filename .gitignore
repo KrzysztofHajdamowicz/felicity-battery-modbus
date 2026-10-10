@@ -1,0 +1,19 @@
+# Go
+/bin/
+/dist/
+*.test
+*.out
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# ESPHome
+/esphome/.esphome/
+/esphome/secrets.yaml
+
+# OS / editors
+.DS_Store
+.idea/
+.vscode/
