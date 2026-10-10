@@ -26,7 +26,7 @@ jobs:
         with:
           version: latest
       - run: go test -race -coverprofile=coverage.out ./...
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: coverage
           path: coverage.out
@@ -56,7 +56,7 @@ jobs:
         run: |
           suffix="${GOOS}_${GOARCH}${GOARM:+v$GOARM}"
           go build -trimpath -ldflags "-s -w -X main.version=${GITHUB_SHA::7}" -o "dist/felicityd_${suffix}" ./cmd/felicityd
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: felicityd_${{ matrix.goos }}_${{ matrix.goarch }}${{ matrix.goarm && format('v{0}', matrix.goarm) || '' }}
           path: dist/*
