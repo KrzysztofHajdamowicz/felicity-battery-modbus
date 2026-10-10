@@ -6,7 +6,9 @@ LPBF48, LPBA48 family), with the goal of reading the packs directly from
 **Home Assistant** (MQTT discovery) and, later, from an **ESPHome** device.
 
 > Status: protocol decoded and verified on hardware (3 packs in parallel). `felicityd` (Go daemon,
-> MQTT + Home Assistant discovery) is implemented; the ESPHome component is planned, see *Roadmap*.
+> MQTT + Home Assistant discovery) is released ([v1.0.0](https://github.com/KrzysztofHajdamowicz/felicity-battery-modbus/releases/latest))
+> and runs in production on a Raspberry Pi 5 next to Solar Assistant. The ESPHome component is
+> planned, see *Roadmap*.
 
 ## What is in here
 
@@ -52,6 +54,10 @@ RX  01 03 00 11  00 04  0B C4 0B C4 0B C4 0B BA  00 00 00 00 00 00 00 00 00 00 0
 
 ## felicityd
 
+<p align="center">
+  <img src="docs/images/ha-dashboard.jpg" width="420" alt="Home Assistant dashboard with two Felicity packs: state of charge, power, current and cell voltage delta / max / min per pack">
+</p>
+
 A single static binary for Linux (Raspberry Pi 5 / arm64, amd64, armv7) that:
 
 1. enumerates the packs (addresses 1, 2, … until the first one that does not answer, or the list
@@ -77,9 +83,11 @@ sudo systemctl restart felicityd
 journalctl -u felicityd -f
 ```
 
-Or download `felicityd_<version>_linux_arm64.tar.gz` from the GitHub release page, which contains
-the binary, the unit and the environment template. Before enabling the service, check what the
-daemon sees on the bus:
+Or download `felicityd_<version>_linux_arm64.tar.gz` from the
+[release page](https://github.com/KrzysztofHajdamowicz/felicity-battery-modbus/releases/latest), which
+contains the binary, the unit and the environment template. It coexists with Solar Assistant on the
+same Pi as long as each gets its own RS485 adapter (or its own port of a dual adapter). Before
+enabling the service, check what the daemon sees on the bus:
 
 ```bash
 FELICITYD_SERIAL_PORT=/dev/serial/by-id/usb-...-port0 felicityd -scan
@@ -163,7 +171,9 @@ rule on `main` that requires the *Test and lint* check).
 
 ## Roadmap
 
-1. ~~`felicityd`~~ — done, see above. Next: verify on the Pi 5 with the three packs.
+1. ~~`felicityd`~~ — done and running 24/7 on a Raspberry Pi 5 with three FLB48314TG1 packs,
+   zero bus errors so far. Ideas for later: energy counters, periodic re‑scan for packs added at
+   runtime.
 2. ESPHome external component (C++) for an ESP32 with an RS485 transceiver, generating the
    sensors from a `packs:` option instead of hand‑written YAML.
 3. Verify the alarm / protection registers (0x36–0x3C) and the remaining‑capacity registers
